@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Event, Participant
-from .serializers import EventSerializer, ParticipantSerializer
+from .models import Event, Participant, Register
+from .serializers import EventSerializer, ParticipantSerializer, RegisterSerializer
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -10,5 +10,10 @@ class EventViewSet(viewsets.ModelViewSet):
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer
+
+
+class RegisterViewSet(viewsets.ModelViewSet):
+    queryset = Register.objects.all()
+    serializer_class = RegisterSerializer
 
 
