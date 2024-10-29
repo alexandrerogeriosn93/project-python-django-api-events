@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Event, Participant
+from .models import Event, Participant, Registert
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,4 +19,9 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = ['id', 'name', 'cpf', 'email', 'phone']
 
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Registert
+        fields = ['id', 'event', 'participant', 'date_event']
 
