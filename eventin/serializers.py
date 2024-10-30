@@ -25,3 +25,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = Register
         fields = ['id', 'event', 'participant', 'date_register']
 
+
+class GetRegistersByParticipantSerializer(serializers.ModelSerializer):
+    event = serializers.ReadOnlyField(source='event.title')
+
+    class Meta:
+        model = Register
+        fields = ['event', 'date_register']
+
+
+class GetRegistersByEventSerializer(serializers.ModelSerializer):
+    participant = serializers.ReadOnlyField(source='participant.name')
+
+    class Meta:
+        model = Participant
+        fields = ['participant', 'date_register']
+
+
