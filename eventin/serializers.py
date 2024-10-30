@@ -38,7 +38,7 @@ class GetRegistersByEventSerializer(serializers.ModelSerializer):
     participant = serializers.ReadOnlyField(source='participant.name')
 
     class Meta:
-        model = Participant
+        model = Register
         fields = ['participant', 'date_register']
 
 
