@@ -19,6 +19,27 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = ['id', 'name', 'cpf', 'email', 'phone']
 
+    def validate_name(self, name):
+        if not name.replace(' ', '').isalpha():
+            raise serializers.ValidationError('O nome deve contar letras e espaços.')
+        
+        if not len(name) >= 3:
+            raise serializers.ValidationError('O nome deve conter mais de três caracteres.')
+        
+        return name
+    
+    def validate_email(self, email):
+        if '@' not in email or '.' not in email.split('@')[-1]:
+            raise serializers.ValidationError('O e-mail deve ser válido.')
+        
+        return email
+    
+    def validate_phone(self, phone):
+        if len(phone) < 11 or not phone.isdigit():
+            raise serializers.ValidationError('O telefone deve conter onze dígitos.')
+        
+        return phone
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
