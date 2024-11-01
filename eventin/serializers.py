@@ -3,7 +3,8 @@ from .models import Event, Participant, Register
 from .validators import (
     is_invalid_email,
     is_invalid_name, 
-    is_invalid_phone
+    is_invalid_phone,
+    is_invalid_cpf
 )
 
 class EventSerializer(serializers.ModelSerializer):
@@ -33,6 +34,9 @@ class ParticipantSerializer(serializers.ModelSerializer):
         
         if is_invalid_phone(data.get('phone', '')):
             raise serializers.ValidationError({'phone': 'Número de telefone inválido.'})
+        
+        if is_invalid_cpf(data.get('cpf', '')):
+            raise serializers.ValidationError({'cpf': 'Número de CPF inválido.'})
         
         return data
 
