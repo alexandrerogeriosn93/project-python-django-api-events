@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, filters
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .models import Event, Participant, Register
@@ -9,12 +9,16 @@ from .serializers import (
     GetRegistersByEventSerializer,
     GetRegistersByParticipantSerializer
 )
+from django_filters.rest_framework import DjangoFilterBackend
 
 class EventViewSet(viewsets.ModelViewSet):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields = ['title']
+    search_fields = ['title']
 
 
 class ParticipantViewSet(viewsets.ModelViewSet):
@@ -22,6 +26,9 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields = ['name']
+    search_fields = ['name', 'cpf']
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
@@ -29,6 +36,9 @@ class RegisterViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     queryset = Register.objects.all()
     serializer_class = RegisterSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields = ['date_register']
+    search_fields = ['date_register']
 
 
 class GetRegistersByParticipant(generics.ListAPIView):
