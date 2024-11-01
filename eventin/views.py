@@ -5,6 +5,7 @@ from .models import Event, Participant, Register
 from .serializers import (
     EventSerializer,
     ParticipantSerializer,
+    ParticipantSerializerV2,
     RegisterSerializer,
     GetRegistersByEventSerializer,
     GetRegistersByParticipantSerializer
@@ -25,10 +26,15 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Participant.objects.all()
-    serializer_class = ParticipantSerializer
+    # serializer_class = ParticipantSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     ordering_fields = ['name']
     search_fields = ['name', 'cpf']
+
+    def get_serializer_class(self):
+        if self.request.version == 'v2':
+            return ParticipantSerializerV2
+        return ParticipantSerializer
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
