@@ -1,5 +1,10 @@
 from rest_framework import serializers
 from .models import Event, Participant, Register
+from .validators import (
+    is_invalid_email,
+    is_invalid_name, 
+    is_invalid_phone
+)
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,27 +23,18 @@ class ParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
         fields = ['id', 'name', 'cpf', 'email', 'phone']
-
-    def validate_name(self, name):
-        if not name.replace(' ', '').isalpha():
-            raise serializers.ValidationError('O nome deve contar letras e espaços.')
-        
-        if not len(name) >= 3:
-            raise serializers.ValidationError('O nome deve conter mais de três caracteres.')
-        
-        return name
     
-    def validate_email(self, email):
-        if '@' not in email or '.' not in email.split('@')[-1]:
-            raise serializers.ValidationError('O e-mail deve ser válido.')
+    def validate(self, data):
+        if is_invalid_name(data.get('name', '')):
+            raise serializers.ValidationError({'name': 'O nome deve conter acima de três caracteres e apenas letras.'})
         
-        return email
-    
-    def validate_phone(self, phone):
-        if len(phone) < 11 or not phone.isdigit():
-            raise serializers.ValidationError('O telefone deve conter onze dígitos.')
+        if is_invalid_email(data.get('email', '')):
+            raise serializers.ValidationError({'email': 'O e-mail deve ser válido.'})
         
-        return phone
+        if is_invalid_phone(data.get('phone', '')):
+            raise serializers.ValidationError({'phone': 'Número de telefone inválido.'})
+        
+        return data
 
 
 class RegisterSerializer(serializers.ModelSerializer):
