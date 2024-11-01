@@ -41,6 +41,12 @@ class ParticipantSerializer(serializers.ModelSerializer):
         return data
 
 
+class ParticipantSerializerV2(serializers.ModelSerializer):
+    class Meta:
+        model = Participant
+        fields = ['id', 'name', 'email', 'phone']
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Register
