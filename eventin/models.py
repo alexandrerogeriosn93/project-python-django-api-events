@@ -1,21 +1,22 @@
 from django.db import models
+from django.core.validators import MinLengthValidator, EmailValidator
 
 class Event(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    local = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, validators=[MinLengthValidator(5)])
+    description = models.TextField(validators=[MinLengthValidator(10)])
+    local = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
     date_event = models.DateTimeField()
-    capacity = models.PositiveIntegerField()
+    capacity = models.PositiveIntegerField(validators=[MinLengthValidator(1)])
 
     def __str__(self):
         return self.title
 
 
 class Participant(models.Model):
-    name = models.CharField(max_length=100)
-    cpf = models.CharField(max_length=11)
-    email = models.EmailField(max_length=100)
-    phone = models.CharField(max_length=30)
+    name = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
+    cpf = models.CharField(max_length=11, validators=[MinLengthValidator(11)], unique=True)
+    email = models.EmailField(max_length=100, validators=[EmailValidator()])
+    phone = models.CharField(max_length=30, blank=True)
 
     def __str__(self):
         return self.name
